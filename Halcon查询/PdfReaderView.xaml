@@ -1,0 +1,19 @@
+﻿<Page x:Class="Halcon查询.PdfReaderView"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Halcon查询"
+      mc:Ignorable="d" 
+      xmlns:wb2 ="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
+      xmlns:pdfium ="clr-namespace:Patagames.Pdf.Net.Controls.Wpf;assembly=Patagames.Pdf.Wpf"
+      xmlns:comm="clr-namespace:Halcon查询.CommandBaseClass"
+      d:DesignHeight="500" d:DesignWidth="700"
+      Background="#F8F5FF"
+      Title="PdfReaderView">
+    <Grid>
+        <local:PdfViewControl x:Name="pdfcontrol" PdfPath="{Binding PdfPath}" SelectPage="{Binding SelectPdfPage}">
+            
+        </local:PdfViewControl>
+    </Grid>
+</Page>

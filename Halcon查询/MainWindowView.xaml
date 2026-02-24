@@ -1,0 +1,88 @@
+﻿<Window x:Class="Halcon查询.MainWindowView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ButtonHelper ="clr-namespace:Halcon查询.CommandBaseClass"
+        xmlns:locate ="clr-namespace:Halcon查询"
+        Title="函数库查询工具" Height="700" Width="1200"
+        WindowStartupLocation="CenterScreen"
+        Background="#F8F5FF" SizeChanged="Window_SizeChanged">
+
+    <Window.Resources>
+    </Window.Resources>
+
+    <Grid Margin="0,0,0,0" Name="MainWindowGrid">
+        <!-- 背景动画 -->
+        <Rectangle Margin="0,0,0,0">
+            <Rectangle.Fill>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                    <GradientStop Color="#F8F5FF" Offset="0"/>
+                    <GradientStop Color="#E8E1F5" Offset="1"/>
+                </LinearGradientBrush>
+            </Rectangle.Fill>
+            <!--<Rectangle.RenderTransform>
+                <ScaleTransform ScaleX="1" ScaleY="1"/>
+            </Rectangle.RenderTransform>-->
+        </Rectangle>
+
+        <!-- 主布局 -->
+        <Grid Margin="20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!-- 标题 -->
+            <Border Grid.Row="0"
+        CornerRadius="12"
+        Background="{StaticResource PrimaryColor}"
+        Margin="0,0,0,20"
+        Padding="20,15">
+                <TextBlock Text="📚 Halcon函数查询工具"
+               Foreground="White"
+               FontSize="24"
+               FontWeight="Bold"
+               HorizontalAlignment="Center"/>
+            </Border>
+
+            <!--顶部切换界面按钮-->
+            <StackPanel Grid.Row="0" 
+            HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,-20,0,0" Orientation="Horizontal">
+                <Button  Style="{StaticResource ImageSourceButtonStyle}" 
+             ButtonHelper:ButtonHelper.ImageSource="{Binding Converter= {StaticResource ImageConvert},ConverterParameter=放大镜}"
+             ButtonHelper:ButtonHelper.ImageWidth="30" ButtonHelper:ButtonHelper.ImageHeight="30"
+             Width="50" Height="50" Margin="2" Command="{Binding CutPageCommand}" CommandParameter="Search"></Button>
+                <Button  Style="{StaticResource ImageSourceButtonStyle}" 
+             ButtonHelper:ButtonHelper.ImageSource="{Binding Converter= {StaticResource ImageConvert},ConverterParameter=目录}" 
+             ButtonHelper:ButtonHelper.ImageWidth="30" ButtonHelper:ButtonHelper.ImageHeight="30"
+             Width="50" Height="50" Margin="2" Command="{Binding CutPageCommand}" CommandParameter="Detail"></Button>
+                <Button  Style="{StaticResource ImageSourceButtonStyle}" 
+             ButtonHelper:ButtonHelper.ImageSource="{Binding Converter= {StaticResource ImageConvert},ConverterParameter=书}" 
+             ButtonHelper:ButtonHelper.ImageWidth="30" ButtonHelper:ButtonHelper.ImageHeight="30"
+             Width="50" Height="50" Margin="2" Command="{Binding CutPageCommand}" CommandParameter="PdfView"></Button>
+            </StackPanel>
+
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <!-- 主内容区 -->
+                    <ColumnDefinition Width="*"/>
+                    <!-- 分隔条 -->
+                    <ColumnDefinition Width="Auto"/>
+                    <!-- AI 聊天辅助区 -->
+                    <ColumnDefinition Width="350"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- 左侧：原来的主内容显示区 -->
+                <Frame Grid.Column="0" Name="frame" Content="{Binding SeletPage,Source={x:Static locate:App.shareDataModel}}" NavigationUIVisibility="Hidden">
+                </Frame>
+
+                <!-- 中间：可拖拽的分隔条 -->
+                <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Center" VerticalAlignment="Stretch" 
+                              Background="Transparent" Cursor="SizeWE" ShowsPreview="True" Margin="5,0"/>
+
+                <!-- 右侧：AI 智能对话面板 -->
+                <locate:AIChatView Grid.Column="2" Margin="0,0,0,0" DataContext="{Binding ChatViewModel}" />
+            </Grid>
+
+        </Grid>
+    </Grid>
+</Window>

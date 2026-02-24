@@ -1,0 +1,209 @@
+﻿<Page x:Class="Halcon查询.SearchView"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Halcon查询"
+      xmlns:i="http://schemas.microsoft.com/xaml/behaviors" 
+      xmlns:comm="clr-namespace:Halcon查询.CommandBaseClass"
+      mc:Ignorable="d" 
+      d:DesignHeight="500" d:DesignWidth="700"
+      Title="SearchView">
+
+    <Grid>
+        <Grid.Resources>
+            <x:Array x:Key="test" Type="local:SearchResult">
+                <local:SearchResult FuncName="calibration1" FuncCapacity="标定用" PageIndex="15" CanJump="True"/>
+                <local:SearchResult FuncName="calibration2" FuncCapacity="标定用" PageIndex="15" CanJump="True"/>
+                <local:SearchResult FuncName="calibration3" FuncCapacity="标定用" PageIndex="15" CanJump="True"/>
+                <local:SearchResult FuncName="calibration4" FuncCapacity="标定用" PageIndex="15" CanJump="True"/>
+            </x:Array>
+        </Grid.Resources>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <!-- 搜索区域 -->
+        <Border Grid.Row="0"
+        CornerRadius="12"
+        Background="White"
+        Padding="20"
+        Margin="0,0,0,0"
+        BorderBrush="{StaticResource SecondaryColor}"
+        BorderThickness="2">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- 搜索输入框 -->
+                <TextBox x:Name="SearchTextBox"
+                 Grid.Column="0"
+                 Style="{StaticResource SearchTextBoxStyle}"
+                 Margin="0,0,10,0">
+                    <TextBox.Text>
+                        <Binding Path="SearchInput" UpdateSourceTrigger="PropertyChanged">
+                        </Binding>
+                    </TextBox.Text>
+                </TextBox>
+
+                <!-- 搜索按钮 -->
+                <Button x:Name="SearchByNameButton"
+                Grid.Column="1"
+                Content="🔍 按名称搜索"
+                Style="{StaticResource PrimaryButtonStyle}"
+                Margin="0,0,10,0"
+                Width="130"
+                Command="{Binding SearchByNameCommand}"/>
+
+                <Button x:Name="SearchByFunctionButton"
+                Grid.Column="2"
+                Content="📖 按功能搜索"
+                Style="{StaticResource SecondaryButtonStyle}"
+                Margin="0,0,10,0"
+                Width="130"
+                Command="{Binding SearchByFuncCommand}"/>
+
+                <!-- 清除按钮 -->
+                <Button x:Name="ClearButton"
+                Grid.Column="3"
+                Content="🗑️ 清除"
+                Style="{StaticResource SecondaryButtonStyle}"
+                Width="100"
+                Command="{Binding ClearInputCommand}"/>
+            </Grid>
+        </Border>
+
+        <!-- 结果显示区域 -->
+        <Border Grid.Row="1"
+        CornerRadius="12"
+        Background="White"
+        Padding="2"
+        BorderBrush="{StaticResource SecondaryColor}"
+        BorderThickness="2">
+            <Grid x:Name="ResultsContainer">
+                <!-- 有结果时的列表视图 -->
+                <ListView x:Name="ResultsListView"
+                  Style="{StaticResource ResultsListViewStyle}"
+                  Visibility="{Binding SearchViewVisibility}"
+                  ItemsSource="{Binding results}">
+                    <i:Interaction.Behaviors>
+                        <comm:ListViewDoubleClickBehavior Command="{Binding MouseDoubleClickCommand}"/>
+                    </i:Interaction.Behaviors>
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="函数名" Width="{Binding ActualWidth, ElementName=ResultsContainer, Converter={StaticResource PercentageConverter},ConverterParameter=40}">
+                                <GridViewColumn.HeaderContainerStyle>
+                                    <Style TargetType="GridViewColumnHeader" BasedOn="{StaticResource GridViewHeaderStyle}">
+                                        <Setter Property="Width" Value="{Binding RelativeSource={RelativeSource Self},Path=Column.ActualWidth}"/>
+                                    </Style>
+                                </GridViewColumn.HeaderContainerStyle>
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding FuncName}"
+                                         FontWeight="Medium"
+                                         Padding="12,8"
+                                         VerticalAlignment="Center"
+                                         HorizontalAlignment="Left"
+                                         />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="功能描述" Width="{Binding ActualWidth, ElementName=ResultsContainer, Converter={StaticResource PercentageConverter},ConverterParameter=60}">
+                                <GridViewColumn.HeaderContainerStyle>
+                                    <Style TargetType="GridViewColumnHeader" BasedOn="{StaticResource GridViewHeaderStyle}"/>
+                                </GridViewColumn.HeaderContainerStyle>
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding FuncCapacity}"
+                                         TextWrapping="Wrap"
+                                         Padding="12,8"
+                                         VerticalAlignment="Center"
+                                                   HorizontalAlignment="Left"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="页码" Width="80">
+                                <GridViewColumn.HeaderContainerStyle>
+                                    <Style TargetType="GridViewColumnHeader" BasedOn="{StaticResource GridViewHeaderStyle}"/>
+                                </GridViewColumn.HeaderContainerStyle>
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding PageIndex}"
+                                         HorizontalAlignment="Center"
+                                         Padding="12,8"
+                                         VerticalAlignment="Center"
+                                         />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="跳转至PDF" Width="100">
+                                <GridViewColumn.HeaderContainerStyle>
+                                    <Style TargetType="GridViewColumnHeader" BasedOn="{StaticResource GridViewHeaderStyle}"/>
+                                </GridViewColumn.HeaderContainerStyle>
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Content="跳转"
+                                      Style="{StaticResource JumpButtonStyle}"
+                                      Tag="{Binding CanJump}"
+                                      HorizontalAlignment="Center"
+                                      VerticalAlignment="Center"
+                                                Command="{Binding DataContext.ListViewButtonCommand, RelativeSource={RelativeSource AncestorType=ListView}}"
+                                                CommandParameter="{Binding}"
+                                      />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+
+                <!-- 无结果时的提示 -->
+                <Border x:Name="NoResultsPanel"
+                Background="{StaticResource BackgroundColor}"
+                CornerRadius="12"
+                Visibility="{Binding NoSearchResultViewVisivility}">
+                    <StackPanel HorizontalAlignment="Center"
+                        VerticalAlignment="Center">
+                        <TextBlock Text="😕 未找到相关函数"
+                           Foreground="{StaticResource TextColor}"
+                           FontSize="18"
+                           FontWeight="Bold"
+                           Margin="0,0,0,20"
+                           HorizontalAlignment="Center"/>
+
+                        <Button x:Name="BrowserJumpButton"
+                        Content="🌐 在浏览器中搜索"
+                        Style="{StaticResource NotFoundButtonStyle}"
+                        Command="{Binding explorerSearchCommand}"/>
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </Border>
+
+        <!-- 状态栏 -->
+        <StatusBar Grid.Row="2" 
+           Background="{StaticResource SecondaryColor}"
+           Margin="0,00,0,0"
+           Height="30"
+           >
+            <!--CornerRadius="6">-->
+            <StatusBarItem>
+                <TextBlock x:Name="StatusText"
+                   Text="就绪"
+                   Foreground="{StaticResource TextColor}"
+                   Margin="10,0"/>
+            </StatusBarItem>
+            <StatusBarItem HorizontalAlignment="Right">
+                <TextBlock x:Name="ResultsCountText"
+                   Text ="{Binding ResultesPageInt}"
+                   Foreground="{StaticResource TextColor}"
+                   Margin="10,0"/>
+            </StatusBarItem>
+        </StatusBar>
+    </Grid>
+</Page>

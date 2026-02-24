@@ -1,0 +1,62 @@
+<Window x:Class="Halcon查询.AISettingsView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:Halcon查询"
+        Title="AI 配置中心" Height="420" Width="480"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize"
+        Background="#F5F5F5">
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- 标题 -->
+        <TextBlock Grid.Row="0" Text="⚙ AI 模型配置" FontSize="20" FontWeight="Bold" Foreground="#333" Margin="0,0,0,15"/>
+
+        <!-- API 供应商 -->
+        <StackPanel Grid.Row="1" Margin="0,0,0,10">
+            <TextBlock Text="API 供应商" FontWeight="SemiBold" Foreground="#555" Margin="0,0,0,4"/>
+            <ComboBox x:Name="ProviderComboBox" SelectedIndex="1" SelectionChanged="ProviderComboBox_SelectionChanged"
+                      Height="32" FontSize="14" Padding="8,4">
+                <ComboBoxItem Content="OpenAI"/>
+                <ComboBoxItem Content="DeepSeek"/>
+                <ComboBoxItem Content="千问 (Qwen)"/>
+                <ComboBoxItem Content="Gemini"/>
+                <ComboBoxItem Content="Ollama (本地)"/>
+            </ComboBox>
+        </StackPanel>
+
+        <!-- API Key -->
+        <StackPanel Grid.Row="2" Margin="0,0,0,10">
+            <TextBlock Text="API Key（密钥）" FontWeight="SemiBold" Foreground="#555" Margin="0,0,0,4"/>
+            <PasswordBox x:Name="ApiKeyBox" Height="32" FontSize="14" Padding="8,4"/>
+        </StackPanel>
+
+        <!-- API Endpoint -->
+        <StackPanel Grid.Row="3" Margin="0,0,0,10">
+            <TextBlock Text="API Endpoint（接口地址）" FontWeight="SemiBold" Foreground="#555" Margin="0,0,0,4"/>
+            <TextBox x:Name="EndpointBox" Height="32" FontSize="14" Padding="8,4"/>
+        </StackPanel>
+
+        <!-- 模型名称 -->
+        <StackPanel Grid.Row="4" Margin="0,0,0,10">
+            <TextBlock Text="模型名称" FontWeight="SemiBold" Foreground="#555" Margin="0,0,0,4"/>
+            <TextBox x:Name="ModelNameBox" Height="32" FontSize="14" Padding="8,4"/>
+        </StackPanel>
+
+        <!-- 按钮区 -->
+        <StackPanel Grid.Row="6" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Content="取消" Width="80" Height="35" Margin="0,0,10,0" Click="Cancel_Click"
+                    Background="White" BorderBrush="#CCC" FontSize="14" Cursor="Hand"/>
+            <Button Content="保存配置" Width="120" Height="35" Click="Save_Click"
+                    Background="#0078D7" Foreground="White" BorderThickness="0" FontSize="14" FontWeight="Bold" Cursor="Hand"/>
+        </StackPanel>
+    </Grid>
+</Window>
